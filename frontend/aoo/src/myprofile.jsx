@@ -48,6 +48,12 @@ function MyProfile() {
         }
     }
 
+    useEffect(()=>{
+        if(showModal){
+            alert("send request to backend")
+        }
+    },[showModal])
+
     const showConnections = () => {
         setShowModal(true);
     };
