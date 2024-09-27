@@ -344,7 +344,11 @@ app.post("/Post",async(req,res)=>{
             Re:Data.ReplyPerm,
             Desc:Data.Description,
             Course:UserData.course,
+<<<<<<< HEAD
             Img:UserData.selectedImg,
+=======
+            Img: UserData.selectedImg
+>>>>>>> cefa0d140bc8ac733bb507e9789890be255b9ec0
         }
         try {
             await PostModel.create(FinalData)
@@ -468,7 +472,11 @@ app.post("/AreaPost",async(req,res)=>{
             Re:Data.ReplyPerm,
             Desc:Data.Description,
             Course:UserData.course,
+<<<<<<< HEAD
             Img:UserData.selectedImg,
+=======
+            Img: UserData.selectedImg
+>>>>>>> cefa0d140bc8ac733bb507e9789890be255b9ec0
         }
         try {
             await AreaPostModel.create(FinalData)
