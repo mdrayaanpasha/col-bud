@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import logo from "./assets/logo-dark-removebg-preview.png"
+import Nav from "./nav";
 
 function Feed() {
     const [feedData, setFeedData] = useState(null);
@@ -58,28 +59,9 @@ function Feed() {
         <>
         <style>
             {`
-            @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-            body{
-                background:#0A0A0A;
-                color:white;
-                font-family:Poppins;
-            }
-            nav{
-            position:fixed;
-            top:0;
-            height:100%;
-            width:30vw;
-            align-items:center;
-            justify-content:space-evenly;
-            }
-            nav img{
-            height:12vh;
-            margin-left:1vw;
-            }
            
-            nav h3{
-            color:#FF5722;
-            }
+           
+           
             hr{
             margin-top:0;
           
@@ -121,87 +103,12 @@ function Feed() {
 
             border-radius:50%;
             }
-            main{
-            margin-top:5vh;
-            position:absolute;
-            left:20%;
-            background:#181818;
-            width:70vw;
-            padding:2vw;
-            border-radius:1vw;
-            min-height:200vh;
-            }
-            .nav-div{
-            gap:5vh !important;
-            
-            }
-            .nav-div .i{
-                margin-top:6vh;
-                margin-left:2vw;
-                
-                color:grey;
-                width:15vw;
-                margin-right:2vw;
-                margin-left:2vw;
-                gap:2vw !important;
-                margin-left:2.5vw;
-            }
-                .nav-div .i span{
-                font-size:2.5vh !important;
-                }
+          
 
             `}
         </style>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-            <nav>
-                <img src={logo} alt="" />
-                {UserData &&
-
-                <div className="nav-div" >
-                <div className="i" style={{fontSize:"3vh", cursor:"pointer", fontFamily:"Poppins", background:"#181818", padding:"1vw", borderRadius:'1vw', color:"white",marginLeft:"1.5vw"}}>
-    <i className='fa fa-home'></i>
-    <span> Home</span>
-    <br />
-</div>
-
-<div className="i" style={{fontSize:"3vh", cursor:"pointer", fontFamily:"Poppins"}}>
-    <i className='fa fa-university'></i>
-    <span> {UserData.college.toUpperCase()} Zone</span>
-    <br />
-</div>
-
-<div className="i" style={{fontSize:"3vh", cursor:"pointer", fontFamily:"Poppins"}}>
-    <i className='fa fa-map-pin'></i>
-    <span> {UserData.area} Zone</span>
-    <br />
-</div>
-
-<div className="i" style={{fontSize:"3vh", cursor:"pointer", fontFamily:"Poppins"}}>
-    <i className='fa fa-user'></i>
-    <span> My Profile</span>
-    <br />
-</div>
-
-<div className="i" style={{fontSize:"3vh", cursor:"pointer", fontFamily:"Poppins"}}>
-    <i className='fa fa-bell'></i>
-    <span> Notifications</span>
-    <br />
-</div>
-
-
-
-                </div>
-            }
-
-            <div className="logout" style={{position:"fixed",top:"90%",marginLeft:"1.5vw"}}>
-                <button>Logout</button>
-            </div>
-
-              
-
-            </nav>
+        <Nav pageName="home"></Nav>
+      
             <main>
             
             {error && <p>{error}</p>}

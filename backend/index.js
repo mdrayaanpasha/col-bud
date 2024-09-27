@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import multer from "multer";
-import mongoose from "mongoose";
+import mongoose, { connections } from "mongoose";
 import path from "path";
 import { fileURLToPath } from 'url';
 
@@ -86,6 +86,7 @@ app.post("/feedPage", async (req, res) => {
     let BrosCollege;
     let BrosArea;
     let RawData;
+    let BrosConnections;
 
     try {
         // Fetch user's college and area
@@ -95,6 +96,7 @@ app.post("/feedPage", async (req, res) => {
         }
         BrosCollege = RawData.college;
         BrosArea = RawData.area;
+        BrosConnections=RawData.Connections
     } catch (error) {
         console.error("Error fetching user data:", error);
         res.send({ message: false, error: "Error fetching user data" });
@@ -104,47 +106,74 @@ app.post("/feedPage", async (req, res) => {
         // Fetch users with the same college and area
         let Refined = await RegisterModel.find({ college: BrosCollege, area: BrosArea });
 
-        // Filter out users who are already connections or in the prospect database
-        Refined = RefMe(Refined, Email); // Make sure RefMe is returning the filtered array
+        //this just removes me from the Data
+        Refined = RefMe(Refined, Email); 
+        let N;
+      
+        try {
+            const C = await ConReqModel.find({ RequesterEmail: Email }); 
+            N = C
+        } catch (error) {
+            console.error("Error processing document:", error);
+        }
+
+
+        // N Has all my connection request Users.
+        // Refined Has everyone from my area in my college.
+        //goal is to travel thru each element of refined and see if they are in N, if not then add them
+        //in one of the arrays.
+
+        let NoRequestedUsers=[];
+        for(let i=0;i<Refined.length;i++){
+            let there = false;
+            for(let j=0;j<N.length;j++){
+                if(N[j]["PosterEmail"] === Refined[i]["email"]){
+                    there=true
+                }
+            }
+            if(!there){
+                NoRequestedUsers.push(Refined[i]);
+            }
+        }
+        N=null;
+
+
+        //now i have users who are not me, and not someone who i requested to connect, now i just have to remove
+        //those who are already my connection!
+
+        let FinData = []
+        for(let i=0;i<NoRequestedUsers.length;i++){
+            let there = false;
+            for(let j=0;j<BrosConnections.length;j++){
+                if(BrosConnections[j] === NoRequestedUsers[i]["email"]){
+                    there=true
+                }
+            }
+            if(!there){
+                FinData.push(NoRequestedUsers[i]);
+            }
+        }
+
+
+        console.log("My Connections: ",connections)
+        console.log("Finale Users: ",FinData)
+
         
-        let N= []
-        // console.log(Refined)
-        const MyConnections = RawData.Connections
-        for (const ele of Refined) {
-            try {
-               
-                const C = await ConReqModel.findOne({ RequesterEmail: Email });
+        
 
-                if (!C) {  // If C is null, no document was found
-                    N.push(ele);
-                }
-                
 
-            } catch (error) {
-                console.error("Error processing document:", error);
-            }
-        }
 
-        for (let i = 0; i < MyConnections.length; i++) {
-            let exist = false;
-            for (let j = 0; j < N.length; j++) {
-                if (MyConnections[i] === N[j].email) {
-                    exist = true; 
-                    break; 
-                }
-            }
-            if (exist) {
-                
-                N = N.filter(item => item.email !== MyConnections[i]);
-            }
-        }
+       
+        
+
+        
         
 
         
     
         RawData.password=""
      
-        res.send({ D: N,UI:RawData, message: true });
+        res.send({ D: FinData,UI:RawData, message: true });
     } catch (error) {
         console.error("Error fetching or processing users:", error);
         res.send({ message: false, error: "Error processing users" });
@@ -315,6 +344,7 @@ app.post("/Post",async(req,res)=>{
             Re:Data.ReplyPerm,
             Desc:Data.Description,
             Course:UserData.course,
+            Img:UserData.selectedImg,
         }
         try {
             await PostModel.create(FinalData)
@@ -438,6 +468,7 @@ app.post("/AreaPost",async(req,res)=>{
             Re:Data.ReplyPerm,
             Desc:Data.Description,
             Course:UserData.course,
+            Img:UserData.selectedImg,
         }
         try {
             await AreaPostModel.create(FinalData)

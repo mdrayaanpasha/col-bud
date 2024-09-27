@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-
+import Nav from "./nav";
 function College() {
     const Email = localStorage.getItem("E#M");
     const [postData, setPostData] = useState(null);
@@ -36,20 +36,43 @@ function College() {
 
     return (
         <>
-            <p>Welcome to College Zone</p>
-            {postData && postData.length > 0 ? (
-                
-
-
-
+        <style>
+            {`
+                .post-card{
+                    display:flex;
+                    gap:2vw;
+                    padding:2vw;
+                }
+                .image-section img{
+                    height:10vh;
+                    border-radius:50%;
+                }
+                .upper-section{
+                    display:flex;
+                    gap:2vw;
+                }
+            `}
+        </style>
+        <Nav pageName={'collegeZone'}></Nav>
+        <main>
+        {postData && postData.length > 0 ? (
                 postData.map(ele=>(
                     <>
-                    <p>{ele.College}</p>
-                    <p onClick={e=>window.location.href=`./userProf?id=${ele._UserId}`}>{ele.An ? "Annoynous User" : ele.UserName}</p>
-                    <p>{ele.Course}</p>
-                    {ele.Re ? <a href={`./reply?id=${ele._id}`}>Click here to reply</a> : null}
-                    <p>{ele.Desc}</p>
-                    <p></p>
+                    <div className="post-card">
+                        <div className="image-section">
+                            <img src={ele.Img} />
+                        </div>
+                        <div className="description-section">
+                            <div className="upper-section">
+                                <p onClick={e=>window.location.href=`./userProf?id=${ele._UserId}`}>{ele.An ? "Annoynous User" : ele.UserName}</p>
+                                <p style={{color:"grey",fontWeight:"bold"}}>{ele.Course}</p>
+                            </div>
+                            <div className="lower-section">
+                                <p>{ele.Desc}</p>
+                                {ele.Re ? <button onClick={e=>window.location.href=`./reply?id=${ele._id}`}>Reply</button> : null}
+                            </div>
+                        </div>
+                    </div>
                     </>
                 ))
             ) :(
@@ -57,6 +80,7 @@ function College() {
                 <p>sorry no one in your college has posted anything yet!</p>
                 </>
             )}
+        </main>
         </>
     );
 }

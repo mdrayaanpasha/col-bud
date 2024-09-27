@@ -8,7 +8,8 @@ const PostSchema = new mongoose.Schema(
         An: Boolean,
         Re: Boolean,
         Desc:String,
-        Course:String
+        Course:String,
+        Img:String,
     }
 );
 
