@@ -2,11 +2,29 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import logo from "./assets/logo-dark-removebg-preview.png"
 import Nav from "./nav";
+import LamePage from "./lame";
 
 function Feed() {
     const [feedData, setFeedData] = useState(null);
     const [UserData, setUserData] = useState(null);
     const [error, setError] = useState(null);
+    const email = localStorage.getItem("E#M");
+   
+    if(!email){
+        return(
+            <>
+        <Nav></Nav>
+        <main>
+        <LamePage
+                    title="You Are Not Signed In!"
+                    description=""
+                    url="./reg"
+                    btnContent="Sign in Now"
+        />
+        </main>
+        </>
+        )
+    }
 
     useEffect(() => {
         const fetchFeedData = async () => {
@@ -37,10 +55,16 @@ function Feed() {
             post_id:ele._id,
             PosterEmail:ele.email,
             PosterName:ele.name,
+            PosterImg:ele.selectedImg,
+            PosterCourse:ele.course,
             RequesterEmail:Email,
             RequesterName:UserData.name,
+            RequesterImg:UserData.selectedImg,
+            RequesterCourse:UserData.course,
+            RequesterId:UserData._id,
             Status:false
         }
+        
        
         try {
             const D = await axios.post("http://localhost:9090/ConnectRequest",{D:Data})
@@ -115,7 +139,7 @@ function Feed() {
             <div className="sticky">
             {UserData && <center style={{position:"fixed",top:"5%",right:"40%",background:"#0A0A0A",padding:"0.5vw",borderRadius:"1vw"}}><p style={{fontWeight:"bold",textAlign:"center",margin:"0"}}> {UserData.area} @  {UserData.college.toUpperCase()}.</p></center>}
             </div>
-            {feedData ? (
+            {feedData && feedData.length > 0 ?  (
                 feedData.map((ele, index) => (
                     <>
                     <div key={index} className="post">
@@ -138,8 +162,15 @@ function Feed() {
                     </>
                 ))
             ) : (
-                <p>Loading...</p>
+                <LamePage
+                    title="No Users Found"
+                    description="Share this With Your College Freinds :)"
+                    url="./share"
+                    btnContent="Share"
+                />
+                
             )}
+            
             </main>
         </>
     );

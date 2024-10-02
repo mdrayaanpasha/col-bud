@@ -153,23 +153,6 @@ app.post("/feedPage", async (req, res) => {
                 FinData.push(NoRequestedUsers[i]);
             }
         }
-
-
-        console.log("My Connections: ",connections)
-        console.log("Finale Users: ",FinData)
-
-        
-        
-
-
-
-       
-        
-
-        
-        
-
-        
     
         RawData.password=""
      
@@ -399,6 +382,8 @@ app.post("/postReply",async(req,res)=>{
         description:Data["description"],
         userId:null,
         userName:null,
+        selectedImg:null,
+
     }
 
     //S1
@@ -407,6 +392,8 @@ app.post("/postReply",async(req,res)=>{
         const UserData = await RegisterModel.findOne({email:Data["UserEmail"]})
         finalizedData["userId"] = UserData["_id"].toString()
         finalizedData["userName"] = UserData["name"]
+        finalizedData["selectedImg"] = UserData["selectedImg"]
+    
     } catch (error) {
         console.log(error)
         res.send({message:!true})
@@ -544,6 +531,7 @@ app.post("/AreaPostReply",async(req,res)=>{
         description:Data["description"],
         userId:null,
         userName:null,
+        selectedImg:null,
     }
 
     //S1
@@ -552,6 +540,7 @@ app.post("/AreaPostReply",async(req,res)=>{
         const UserData = await RegisterModel.findOne({email:Data["UserEmail"]})
         finalizedData["userId"] = UserData["_id"].toString()
         finalizedData["userName"] = UserData["name"]
+        finalizedData["selectedImg"] = UserData["selectedImg"]
     } catch (error) {
         console.log(error)
         res.send({message:!true})
@@ -570,6 +559,93 @@ app.post("/AreaPostReply",async(req,res)=>{
 })
 
 
+app.post("/GiveConnectionsInfo", async (req, res) => {
+    let ConnectionInfo=[];
+    let Connections = req.body.Connections;
+    for (let i = 0; i < Connections.length; i++) {
+        try {
+            let ConnectionInf = await RegisterModel.findOne({ email: Connections[i] });
+            
+            if (ConnectionInf) {
+                let Augmented = {
+                    name:ConnectionInf.name,
+                    selectedImg:ConnectionInf.selectedImg,
+                    _id:ConnectionInf._id,
+                    email:ConnectionInf.email
+                }
+                ConnectionInfo.push(Augmented);
+            } else {
+                console.log(`No user found for email: ${Connections[i]}`);
+            }
+        } catch (error) {
+             res.send({message:false})
+            console.error("Error fetching connection info:", error);
+        }
+    }
+    
 
+    res.send({ message: true, Data: ConnectionInfo }); 
+});
+
+
+app.post("/fetchUserPost",async(req,res)=>{
+
+    let id = req.body.Id
+    let AP;
+    let CP;
+    try {
+        const D = await PostModel.find({UserId:id});
+        CP = D
+        const DD = await AreaPostModel.find({UserId:id});
+        AP = DD 
+        let finData = {
+            AreaPosts: AP,
+            CollegePosts:CP
+        }
+        console.log(finData)
+        res.send({message:true,Data:finData})
+    } catch (error) {
+        res.send({message:false})
+    }
+})
+
+
+app.post("/deleteCollegePost",async(req,res)=>{
+    const id = req.body.id
+    
+    try {
+
+        await PostModel.deleteOne({ _id: id })
+
+        res.send({message:true})
+    } catch (error) {
+        
+    }
+})
+app.post("/deleteAreaPost",async(req,res)=>{
+    const id = req.body.id
+    
+    try {
+        await AreaPostModel.deleteOne({ _id: id })
+        res.send({message:true})
+    } catch (error) {
+        console.log(error)
+        res.send({message:false})
+    }
+})
+
+
+app.post("/arearepliesfetch",async(req,res)=>{
+    const id = req.body.id
+    console.log(id)
+    try {
+        const D = await AreaReplyModel.find({postId:id})
+        console.log(D)
+        res.send({message:true,Data:D})
+    } catch (error) {
+        console.log(error)
+        res.send({message:false})
+    }
+})
 app.listen(9090)
 

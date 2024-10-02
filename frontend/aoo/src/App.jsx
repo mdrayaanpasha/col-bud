@@ -8,9 +8,9 @@ import Login from './login';
 import Feed from './feed';
 import Notifications from './notifications';
 import MyProfile from './myprofile';
-import Colpost from './colpost';
-import College from './college';
-import Reply from './reply';
+import Colpost from './collegepost';
+import College from './collegezone';
+import Reply from './collegeReply';
 import AreaZone from './areazone';
 import AreaPost from './areapost';
 import AreaReply from './areaReply';
@@ -23,15 +23,15 @@ function App(){
     <BrowserRouter>
     <Routes>
       
-        <Route index path='/' element={<Home />} />
+        <Route index path='/' element={<Feed />} />
         <Route index path='/reg' element={<Register />} />
         <Route index path='/login' element={<Login />} />
         <Route index path='/feed' element={<Feed />} />
         <Route index path='/notifications' element={<Notifications />} />
         <Route index path='/myprofile' element={<MyProfile />} />
-        <Route index path='/post' element={<Colpost />} />
+        <Route index path='/collegepost' element={<Colpost />} />
         <Route index path='/collegezone' element={<College />} />
-        <Route index path='/reply' element={<Reply />} />
+        <Route index path='/college-reply' element={<Reply />} />
         <Route index path='/areazone' element={<AreaZone />} />
         <Route index path='/areapost' element={<AreaPost />} />
         <Route index path='/area-reply' element={<AreaReply />} />

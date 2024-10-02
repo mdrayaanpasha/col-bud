@@ -5,9 +5,14 @@ const registerSchema = new mongoose.Schema({
         post_id: String,
         PosterEmail: String,
         PosterName:String,
+        PosterImg:String,
+        PosterCourse:String,
         RequesterEmail: String,
         RequesterName: String,
-        Status: Boolean
+        Status: Boolean,
+        RequesterImg:String,
+        RequesterCourse:String,
+        RequesterId:String,
       
 });
 

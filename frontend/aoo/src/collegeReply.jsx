@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import Nav from "./nav";
+import Nav from "./nav"
 import defImg from "./assets/def.png"
-const AreaReply = () => {
+
+
+const Reply = () => {
     const [Reply,setReply] = useState(false)
     const [replytext,setReplyText] = useState(null)
     const location = useLocation();
@@ -17,7 +19,7 @@ const AreaReply = () => {
     const [PostData,setPostData]=useState(null)
     const postFetcher = async()=>{
         try {
-            const Data = await axios.post("http://localhost:9090/AreaPostFetcher",{PID:id})
+            const Data = await axios.post("http://localhost:9090/postfetcher",{PID:id})
             if(Data.data.message){
                 console.log(Data.data.PostData)
                 setPostData(Data.data.PostData)
@@ -53,7 +55,7 @@ const AreaReply = () => {
                 UserEmail:Email
             }
             try {
-                const response = await axios.post("http://localhost:9090/AreaPostReply",{D:Data})
+                const response = await axios.post("http://localhost:9090/postReply",{D:Data})
                 if(response.data.message){
                     alert("done!")
                 }else{
@@ -67,11 +69,16 @@ const AreaReply = () => {
       
     }
 
+    useEffect(()=>{
+        if(PostData){
+            console.log("PostData: ",PostData)
+        }
+    },[PostData])
+
 
   return (
     <>
-
-<style>
+    <style>
         {`
          .post{
             margin-left:2vw;
@@ -131,24 +138,24 @@ const AreaReply = () => {
           
         `}
     </style>
-        
         <Nav></Nav>
         <main>
             <div className="post">
                 {PostData && PostData.length > 0 &&
                     <>
                         <div className="img-container">
-                            <img src={PostData[0].An ? defImg : PostData[0].Img} alt="notthere" />
+                            <img src={PostData[0].An ? defImg :  PostData[0].Img} alt="notthere" />
                         </div>
                         <div className="text-container">
-                            <p><b>{PostData[0].An ? "Annonymous User" : PostData[0].UserName}<small style={{color:"grey",marginLeft:"2vw"}}>{PostData[0].An ? "" : PostData[0].Course}</small></b></p>
+                            <p><b>{PostData[0].An ? "Annonymous User": PostData[0].UserName}<small style={{color:"grey",marginLeft:"2vw"}}>{PostData[0].An ? "" : PostData[0].Course}</small></b></p>
                             <p>{PostData[0].Desc}</p>
+                                          
                         </div>
                     </>
                 }
             
             </div>
-            
+       
             <h4>Replies</h4>
             <br />
 
@@ -184,4 +191,4 @@ const AreaReply = () => {
   );
 };
 
-export default AreaReply;
+export default Reply;

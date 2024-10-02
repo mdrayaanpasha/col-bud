@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Nav from "./nav";
+import LamePage from "./lame";
+import defImg from "./assets/def.png"
+
 function AreaZone() {
     const Email = localStorage.getItem("E#M");
     const [postData, setPostData] = useState(null);
@@ -60,24 +63,30 @@ function AreaZone() {
                     <>
                     <div className="post-card">
                         <div className="image-section">
-                            <img src={ele.Img} />
+                            <img src={ele.An ? defImg : ele.Img} />
                         </div>
                         <div className="description-section">
                             <div className="upper-section">
                                 <p onClick={e=>window.location.href=`./userProf?id=${ele._UserId}`}>{ele.An ? "Annoynous User" : ele.UserName}</p>
-                                <p style={{color:"grey",fontWeight:"bold"}}>{ele.Course}</p>
+                                <p style={{color:"grey",fontWeight:"bold"}}>{ele.An ? "" : ele.Course}</p>
                             </div>
                             <div className="lower-section">
                                 <p>{ele.Desc}</p>
-                                {ele.Re ? <button onClick={e=>window.location.href=`./reply?id=${ele._id}`}>Reply</button> : null}
+                                {ele.Re ? <button onClick={e=>window.location.href=`./area-reply?id=${ele._id}`}>Reply</button> : null}
                             </div>
                         </div>
                     </div>
+                    <hr />
                     </>
                 ))
             ) :(
                 <>
-                <p>sorry no one in your college has posted anything yet!</p>
+                <LamePage
+                    title="No Posts Found!"
+                    description="You Can Post Stuff Anytime :)"
+                    url="./areapost"
+                    btnContent="Post Now!"
+                />
                 </>
             )}
         </main>

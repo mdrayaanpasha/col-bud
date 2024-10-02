@@ -1,37 +1,19 @@
-import React from 'react';
-import { useState,useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import Nav from './nav';
+import LamePage from './lame';
 import defImg from "./assets/def.png"
 
-function AreaPost() {
 
-    const Email = localStorage.getItem("E#M")
+function Colpost() {
+
+
+    const Email = localStorage.getItem("E#M");
+    const [userInfo,setUserInfo]=useState(null)
     const [vis,setVis]=useState(false);
     const [reply,setReply]=useState(true);
     const [Description,setDescription]=useState(null);
-    const [userInfo,setUserInfo]=useState(null)
-    const formHandle = async(e)=>{
-        e.preventDefault()
-        const Data = {
-            Description:Description,
-            Anonymous:vis,
-            ReplyPerm:reply,
-            UserEm:Email,
-            
-        }
-        try {
-            const response = await axios.post("http://localhost:9090/AreaPost",{D:Data});
-            if(!response.data.message){
-                alert("there is some problem in backend services!")
-            }else{
-                alert("posted!")
-            }
-            window.location.href="./feed"
-        } catch (error) {
-            console.log(error)
-        }
-    }
     useEffect(()=>{
         const fetchUserInfo = async ()=>{
             try {
@@ -50,6 +32,27 @@ function AreaPost() {
         console.log(userInfo)
         
     },[])
+    const formHandle = async(e)=>{
+        e.preventDefault()
+        const Data = {
+            Description:Description,
+            Anonymous:vis,
+            ReplyPerm:reply,
+            UserEm:Email,
+            
+        }
+        try {
+            const response = await axios.post("http://localhost:9090/Post",{D:Data});
+            if(!response.data.message){
+                alert("there is some problem in backend services!")
+            }else{
+                alert("posted!")
+            }
+            window.location.href="./feed"
+        } catch (error) {
+            console.log(error)
+        }
+    }
     if(!Email){
         return(
             <>
@@ -60,6 +63,7 @@ function AreaPost() {
         
         return (
             <>
+            <Nav></Nav>
             <style>
                 {`
                 .post-section{
@@ -105,10 +109,10 @@ function AreaPost() {
 
                 `}
             </style>
-                <Nav></Nav>
-                <main>
+
+            <main>
                 <div className="post-section">
-                    <h2>Area Post.</h2>
+                    <h2>College Post.</h2>
                     <div className="form-section">
                     <form onSubmit={e=>formHandle(e)}>
                         <label htmlFor="description">What's on your mind today? 🧠</label> <br />
@@ -170,4 +174,4 @@ function AreaPost() {
     }
 }
 
-export default AreaPost
+export default Colpost;

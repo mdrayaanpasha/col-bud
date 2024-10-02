@@ -138,6 +138,16 @@ function Nav({ pageName }) {
 
 }
 
+            .theme-btn{
+             background:white !important;
+            height:6vh !important;
+            width:10vw !important;
+            border:none !important;
+            color:black !important;
+            font-weight:bolder !important;
+            border-radius:0.5vw !important;
+            }
+
 
             `}
         </style>

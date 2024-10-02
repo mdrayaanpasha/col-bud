@@ -5,6 +5,7 @@ const registerSchema = new mongoose.Schema({
     description:String,
     userId:String,
     userName:String,
+    selectedImg:String,
 });
 
 const ReplyModel = mongoose.model('ReplyModel', registerSchema);
