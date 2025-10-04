@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+
+  mongo:
+    image: mongo:7
+    container_name: mongo_colbud
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend_colbud
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/colbud
+    depends_on:
+      - mongo
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend/aoo
+      dockerfile: Dockerfile
+    container_name: frontend_colbud
+    ports:
+      - "3003:3003"
+    
+    depends_on:
+      - backend
+    
+    restart: always
+
+  
+
+volumes:
+  mongo_data:
